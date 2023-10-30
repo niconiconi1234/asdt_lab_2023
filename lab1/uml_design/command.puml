@@ -1,0 +1,125 @@
+@startuml command
+interface ICommand {
+    + void execute()
+}
+
+abstract class DiskCommand {
+    MarkdownEditor context
+    + void execute()
+}
+
+DiskCommand .up.|> ICommand
+
+class LoadCommand {
+    + void execute()
+}
+
+LoadCommand -up-|> DiskCommand
+
+class SaveCommand {
+    + void execute()
+}
+
+SaveCommand -up-|> DiskCommand
+
+abstract class EditCommand {
+    EditingFile context
+    + void execute()
+    + void undo()
+}
+
+EditCommand .up.|> ICommand
+
+class InsertCommand {
+    + void execute()
+    + void undo()
+}
+
+InsertCommand -up-|> EditCommand
+
+class DeleteCommand {
+    + void execute()
+    + void undo()
+}
+
+DeleteCommand -up-|> EditCommand
+
+class AppendHeadCommand {
+    + void execute()
+    + void undo()
+}
+
+AppendHeadCommand -up-|> EditCommand
+
+class AppendTailCommand {
+    + void execute()
+    + void undo()
+}
+
+AppendTailCommand -up-|> EditCommand
+
+abstract class DisplayCommand {
+    EditingFile context
+    + void execute()
+}
+
+DisplayCommand .up.|> ICommand
+
+class ListCommand {
+    + void execute()
+}
+
+ListCommand -up-|> DisplayCommand
+
+class ListTreeCommand {
+    + void execute()
+}
+
+ListTreeCommand -up-|> DisplayCommand
+
+class DirTreeCommand {
+    + void execute()
+}
+
+DirTreeCommand -up-|> DisplayCommand
+
+abstract class UndoRedoCommand {
+    UndoRedoManager context
+    + void execute()
+}
+
+UndoRedoCommand .left.|> ICommand
+
+class UndoCommand {
+    + void execute()
+}
+
+UndoCommand -up-|> UndoRedoCommand
+
+class RedoCommand {
+    + void execute()
+}
+
+RedoCommand -up-|> UndoRedoCommand
+
+abstract class LogCommand {
+    LogMannager context
+    + void execute()
+}
+
+LogCommand .up.|> ICommand
+
+class HistoryCommand {
+    + void execute()
+}
+
+HistoryCommand -up-|> LogCommand
+
+class StatsCommand {
+    StatsManager context
+    + void execute()
+}
+
+StatsCommand .right.|> ICommand
+
+@enduml

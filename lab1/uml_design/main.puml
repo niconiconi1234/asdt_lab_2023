@@ -1,0 +1,128 @@
+@startuml main
+
+class MarkdownEditorSingleton {
+    - MarkdownEditor editor
+    + MarkdownEditor getInstance()
+}
+
+class MarkdownEditor {
+    EditingFile curFile
+    Map<String, Module> modules
+    Map<String, CommandExecutionObserver> observers
+    + void addModule(String name, Module module)
+    + void removeModule(String name)
+    + void addObserver(String name, CommandExecutionObserver observer)
+    + void removeObserver(String name)
+    + void executeCommand(String input)
+}
+
+MarkdownEditorSingleton "1" -left- "1" MarkdownEditor
+
+class EditingFile {
+    String name
+    List<String> lines
+}
+
+EditingFile "1" -up-* "1" MarkdownEditor
+
+class UndoRedoManager {
+    Stack<EditCommand> stack0
+    Stack<EditCommand> stack1
+    + void onCommandExecuted(ICommand command)
+    + void recordDo(EditCommand command)
+    + void undoOnce()
+    + void redoOnce()
+}
+
+UndoRedoManager "1" -up-* "1" UndoRedoModule : context
+
+UndoRedoManager --|> CommandExecutionObserver
+
+abstract class Module {
+    Function<Void, Object> fetchContext
+    + ICommand parseCommand(String input)
+}
+
+Module "*" -up-o "1" MarkdownEditor
+
+class DiskModule {
+    Function<Void, Object> fetchContext
+    + DiskModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+MarkdownEditor "1" --* "1" DiskModule : context
+
+class EditModule {
+    Function<Void, Object> fetchContext
+    + EditModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+EditingFile "1" --* "1" EditModule : context
+
+class DisplayModule {
+    Function<Void, Object> fetchContext
+    + DisplayModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+EditingFile "1" --* "1" DisplayModule : context
+
+class UndoRedoModule {
+    Function<Void, Object> fetchContext
+    + UndoRedoModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+class LogModule {
+    Function<Void, Object> fetchContext
+    + LogModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+class StatsModule {
+    Function<Void, Object> fetchContext
+    + StatsModule(Function<Void, Object> fetchContext)
+    + ICommand parseCommand(String input)
+}
+
+' module starts
+
+DiskModule -up-|> Module
+
+EditModule -up-|> Module
+
+DisplayModule -up-|> Module
+
+UndoRedoModule -up-|> Module
+
+LogModule -up-|> Module
+
+StatsModule -up-|> Module
+
+' module ends
+
+interface CommandExecutionObserver {
+    + void onCommandExecuted(ICommand command)
+}
+
+CommandExecutionObserver "*" --o "1" MarkdownEditor
+
+class LogManager {
+    + void onCommandExecuted(ICommand command)
+}
+
+LogManager -up-|> CommandExecutionObserver
+
+LogManager "1" --* "1" LogModule : context
+
+class StatsManager {
+    + void onCommandExecuted(ICommand command)
+}
+
+StatsManager -up-|> CommandExecutionObserver
+
+StatsManager "1" --* "1" StatsModule : context
+
+@enduml
