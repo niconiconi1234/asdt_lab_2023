@@ -15,7 +15,7 @@ public class MarkdownEditor {
 
     @Getter
     @Setter
-    private EditingFile curFile;
+    private EditingFile curFile = new EditingFile();
 
     public void addModule(String name, Module module) {
         modules.put(name, module);

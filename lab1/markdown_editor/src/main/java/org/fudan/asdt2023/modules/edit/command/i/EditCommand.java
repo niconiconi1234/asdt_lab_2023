@@ -4,10 +4,12 @@ import org.fudan.asdt2023.i.ICommand;
 import org.fudan.asdt2023.main.EditingFile;
 
 public abstract class EditCommand implements ICommand {
-    private final EditingFile context;
+    protected final EditingFile context;
+    protected final String command;
 
-    public EditCommand(EditingFile context) {
+    public EditCommand(EditingFile context, String command) {
         this.context = context;
+        this.command = command;
     }
 
     public abstract void execute();
