@@ -1,7 +1,18 @@
 @startuml command
+
+enum ICommandExecutionStatus {
+    NOT_EXECUTED
+    EXECUTION_SUCCESS
+    EXECUTION_FAILURE
+}
+
 interface ICommand {
     + void execute()
+    + ICommandExecutionStatus getStatus()
+    + void setStatus(ICommandExecutionStatus status)
 }
+
+ICommandExecutionStatus --* ICommand
 
 abstract class DiskCommand {
     MarkdownEditor context

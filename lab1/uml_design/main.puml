@@ -28,7 +28,8 @@ EditingFile "1" -up-* "1" MarkdownEditor
 class UndoRedoManager {
     Stack<EditCommand> stack0
     Stack<EditCommand> stack1
-    + void onCommandExecuted(ICommand command)
+    + void beforeCommandExecute(ICommand command)
+    + void afterCommandExecute(ICommand command)
     + void recordDo(EditCommand command)
     + void undoOnce()
     + void redoOnce()
@@ -104,13 +105,15 @@ StatsModule -up-|> Module
 ' module ends
 
 interface CommandExecutionObserver {
-    + void onCommandExecuted(ICommand command)
+    + void beforeCommandExecute(ICommand command)
+    + void afterCommandExecute(ICommand command)
 }
 
 CommandExecutionObserver "*" --o "1" MarkdownEditor
 
 class LogManager {
-    + void onCommandExecuted(ICommand command)
+    + void beforeCommandExecute(ICommand command)
+    + void afterCommandExecute(ICommand command)
 }
 
 LogManager -up-|> CommandExecutionObserver
@@ -118,7 +121,8 @@ LogManager -up-|> CommandExecutionObserver
 LogManager "1" --* "1" LogModule : context
 
 class StatsManager {
-    + void onCommandExecuted(ICommand command)
+    + void beforeCommandExecute(ICommand command)
+    + void afterCommandExecute(ICommand command)
 }
 
 StatsManager -up-|> CommandExecutionObserver
