@@ -5,7 +5,12 @@ import org.fudan.asdt2023.i.ICommand;
 
 public class LogManager implements CommandExecutionObserver {
     @Override
-    public void onCommandExecuted(ICommand command) {
+    public void beforeCommandExecute(ICommand command) {
+
+    }
+
+    @Override
+    public void afterCommandExecute(ICommand command) {
 
     }
 }
