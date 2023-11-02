@@ -7,6 +7,8 @@ import org.fudan.asdt2023.modules.disk.DiskModule;
 import org.fudan.asdt2023.modules.edit.EditModule;
 import org.fudan.asdt2023.modules.log.LogManager;
 import org.fudan.asdt2023.modules.log.LogModule;
+import org.fudan.asdt2023.modules.undoredo.UndoRedoManager;
+import org.fudan.asdt2023.modules.undoredo.UndoRedoModule;
 
 /**
  * Hello world!
@@ -28,5 +30,11 @@ public class App {
         editor.addObserver("log", logManager);
         LogModule logModule = new LogModule(v -> MarkdownEditorSingleton.getInstance().getObserver("log"));
         editor.addModule("log", logModule);
+
+        // undoredo module
+        CommandExecutionObserver undoRedoManager = new UndoRedoManager();
+        editor.addObserver("undoredo", undoRedoManager);
+        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> MarkdownEditorSingleton.getInstance().getObserver("undoredu"));
+        editor.addModule("undoredo", undoRedoModule);
     }
 }
