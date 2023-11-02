@@ -12,6 +12,7 @@ public class AppendTailCommand extends EditCommand {
     public void execute() {
         String text = command.substring(command.indexOf(" ") + 1);
         context.getLines().add(text);
+        setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
 
     }
 

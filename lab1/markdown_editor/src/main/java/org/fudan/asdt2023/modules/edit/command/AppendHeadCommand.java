@@ -12,6 +12,7 @@ public class AppendHeadCommand extends EditCommand {
     public void execute() {
         String text = command.substring(command.indexOf(" ") + 1);
         context.getLines().add(0, text);
+        setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
     }
 
     @Override

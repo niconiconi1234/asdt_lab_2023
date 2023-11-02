@@ -17,6 +17,7 @@ public class InsertCommand extends EditCommand {
             int line = NumberUtil.getNumber(commandPart[1]);
             if(line < 0){
                 System.out.println("非法行号");
+                setStatus(ICommandExecutionStatus.EXECUTED_FAILURE);
                 return;
             }
 
@@ -34,14 +35,14 @@ public class InsertCommand extends EditCommand {
             else{
                 context.getLines().add(line - 1, text);
             }
+
         }
         else{
             //未指定行号，插入末尾
             String text = command.substring(command.indexOf(" ") + 1);
             context.getLines().add(text);
         }
-
-
+        setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
 
     }
 

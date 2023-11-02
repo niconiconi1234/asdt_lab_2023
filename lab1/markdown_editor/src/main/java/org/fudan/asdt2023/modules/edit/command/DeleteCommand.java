@@ -17,9 +17,11 @@ public class DeleteCommand extends EditCommand {
             int line = NumberUtil.getNumber(commandPart[1]);
             if(line < 0 || line >= context.getLines().size()){
                 System.out.println("非法行号");
+                setStatus(ICommandExecutionStatus.EXECUTED_FAILURE);
                 return;
             }
             context.getLines().remove(line - 1);
+            setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
         }
         else{
             //直接删除
@@ -27,9 +29,12 @@ public class DeleteCommand extends EditCommand {
             for(String str: context.getLines()){
                 if(str.endsWith(text)){
                     context.getLines().remove(str);
-                    break;
+                    setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
+                    return;
                 }
             }
+            //没有找到相应的文本，删除失败
+            setStatus(ICommandExecutionStatus.EXECUTED_FAILURE);
         }
 
     }
