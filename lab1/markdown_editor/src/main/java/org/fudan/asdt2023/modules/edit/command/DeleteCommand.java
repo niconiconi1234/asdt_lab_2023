@@ -44,6 +44,6 @@ public class DeleteCommand extends EditCommand {
 
     @Override
     public void undo() {
-        context.getLines().add(editLineNo, editString);
+        context.getLines().add(editLineNo - 1, editString);
     }
 }
