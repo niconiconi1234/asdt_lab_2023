@@ -17,7 +17,12 @@ public abstract class EditCommand implements ICommand {
 
     public abstract void parseCommand();
 
-    public abstract void execute();
+    public abstract void edit();
+
+    public void execute() {
+        parseCommand();
+        edit();
+    }
 
     public abstract void undo();
 

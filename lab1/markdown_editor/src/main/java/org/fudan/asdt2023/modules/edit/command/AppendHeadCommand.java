@@ -9,7 +9,7 @@ public class AppendHeadCommand extends InsertCommand {
     }
 
     @Override
-    public void execute() {
+    public void parseCommand() {
         editLineNo = 1;
         editString = command.substring(command.indexOf(" ") + 1);
     }

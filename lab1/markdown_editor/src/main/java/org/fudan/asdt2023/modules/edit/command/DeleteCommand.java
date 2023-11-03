@@ -38,9 +38,8 @@ public class DeleteCommand extends EditCommand {
     }
 
     @Override
-    public void execute() {
-        parseCommand();
-        context.getLines().remove(editLineNo);
+    public void edit() {
+        context.getLines().remove(editLineNo - 1);
     }
 
     @Override

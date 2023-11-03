@@ -9,7 +9,7 @@ public class AppendTailCommand extends InsertCommand {
 
     @Override
     public void parseCommand() {
-        editLineNo = context.numLines();
+        editLineNo = context.numLines() + 1;
         editString = command.substring(command.indexOf(" ") + 1);
     }
 

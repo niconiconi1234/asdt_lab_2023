@@ -17,7 +17,7 @@ public class InsertCommand extends EditCommand {
             editLineNo = NumberUtil.getNumber(commandPart[1]);
             if(editLineNo <= 0)
                 throw new RuntimeException("非法行号 " + editLineNo);
-            editLineNo = Math.min(editLineNo, context.numLines());
+            editLineNo = Math.min(editLineNo, context.numLines() + 1);
 
             StringBuilder builder = new StringBuilder();
             for(int i = 2; i < commandPart.length - 1; i++){
@@ -29,15 +29,15 @@ public class InsertCommand extends EditCommand {
         }
         else{
             //未指定行号，插入末尾
-            editLineNo = context.numLines();
+            editLineNo = context.numLines() + 1;
             editString = command.substring(command.indexOf(" ") + 1);
         }
     }
 
     @Override
-    public void execute() {
-        parseCommand();
+    public void edit() {
         context.getLines().add(editLineNo - 1, editString);
+        System.out.println(editLineNo + "|" + editString + "|" + context.numLines());
     }
 
     @Override
