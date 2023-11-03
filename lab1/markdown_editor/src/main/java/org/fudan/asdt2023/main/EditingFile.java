@@ -13,4 +13,6 @@ public class EditingFile {
     public EditingFile(){
         lines = new ArrayList<>();
     }
+
+    public int numLines() { return lines.size(); }
 }

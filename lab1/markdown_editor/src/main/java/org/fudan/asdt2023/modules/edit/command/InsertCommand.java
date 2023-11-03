@@ -10,17 +10,15 @@ public class InsertCommand extends EditCommand {
     }
 
     @Override
-    public void execute() {
+    public void parseCommand() {
         String[] commandPart = command.split(" ");
 
         if(NumberUtil.isNumber(commandPart[1])){
             //指定行号
-            int line = NumberUtil.getNumber(commandPart[1]);
-            if(line < 0){
-                System.out.println("非法行号");
-                setStatus(ICommandExecutionStatus.EXECUTED_FAILURE);
-                return;
-            }
+            editLineNo = NumberUtil.getNumber(commandPart[1]);
+            if(editLineNo <= 0)
+                throw new RuntimeException("非法行号 " + editLineNo);
+            editLineNo = Math.min(editLineNo, context.numLines() + 1);
 
             StringBuilder builder = new StringBuilder();
             for(int i = 2; i < commandPart.length - 1; i++){
@@ -28,27 +26,22 @@ public class InsertCommand extends EditCommand {
                 builder.append(" ");
             }
             builder.append(commandPart[commandPart.length - 1]);
-            String text = builder.toString();
-
-            if(line > context.getLines().size()){
-                context.getLines().add(text);
-            }
-            else{
-                context.getLines().add(line - 1, text);
-            }
-
+            editString = builder.toString();
         }
         else{
             //未指定行号，插入末尾
-            String text = command.substring(command.indexOf(" ") + 1);
-            context.getLines().add(text);
+            editLineNo = context.numLines() + 1;
+            editString = command.substring(command.indexOf(" ") + 1);
         }
-        setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
+    }
 
+    @Override
+    public void edit() {
+        context.getLines().add(editLineNo - 1, editString);
     }
 
     @Override
     public void undo() {
-
+        context.getLines().remove(editLineNo - 1);
     }
 }

@@ -7,6 +7,8 @@ import org.fudan.asdt2023.modules.disk.DiskModule;
 import org.fudan.asdt2023.modules.edit.EditModule;
 import org.fudan.asdt2023.modules.log.LogManager;
 import org.fudan.asdt2023.modules.log.LogModule;
+import org.fudan.asdt2023.modules.undoredo.UndoRedoManager;
+import org.fudan.asdt2023.modules.undoredo.UndoRedoModule;
 
 import java.util.Scanner;
 
@@ -25,18 +27,24 @@ public class App {
         EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
         editor.addModule("edit", editModule);
 
+        // undoredo module
+        CommandExecutionObserver undoRedoManager = new UndoRedoManager();
+        editor.addObserver("undoredo", undoRedoManager);
+        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> MarkdownEditorSingleton.getInstance().getObserver("undoredo"));
+        editor.addModule("undoredo", undoRedoModule);
+
         // log module
         CommandExecutionObserver logManager = new LogManager();
         editor.addObserver("log", logManager);
         LogModule logModule = new LogModule(v -> MarkdownEditorSingleton.getInstance().getObserver("log"));
         editor.addModule("log", logModule);
 
-        Scanner scanner = new Scanner(System.in);
-        String command = "";
-        while (true){
-            System.out.println("请输入命令");
-            command = scanner.nextLine();
-            editor.executeCommand(command);
-        }
+//        Scanner scanner = new Scanner(System.in);
+//        String command = "";
+//        while (true){
+//            System.out.println("请输入命令");
+//            command = scanner.nextLine();
+//            editor.executeCommand(command);
+//        }
     }
 }

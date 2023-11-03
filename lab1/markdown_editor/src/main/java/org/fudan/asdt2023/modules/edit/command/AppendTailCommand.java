@@ -1,23 +1,16 @@
 package org.fudan.asdt2023.modules.edit.command;
 
 import org.fudan.asdt2023.main.EditingFile;
-import org.fudan.asdt2023.modules.edit.command.i.EditCommand;
 
-public class AppendTailCommand extends EditCommand {
+public class AppendTailCommand extends InsertCommand {
     public AppendTailCommand(EditingFile context, String command) {
         super(context, command);
     }
 
     @Override
-    public void execute() {
-        String text = command.substring(command.indexOf(" ") + 1);
-        context.getLines().add(text);
-        setStatus(ICommandExecutionStatus.EXECUTED_SUCCESS);
-
+    public void parseCommand() {
+        editLineNo = context.numLines() + 1;
+        editString = command.substring(command.indexOf(" ") + 1);
     }
 
-    @Override
-    public void undo() {
-
-    }
 }
