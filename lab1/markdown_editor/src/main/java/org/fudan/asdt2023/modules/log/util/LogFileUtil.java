@@ -7,11 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LogFileUtil {
-    public static final String LOG_FILE_NAME = "log.txt";
-    private static final File file = new File(LOG_FILE_NAME);
+    public static String LOG_FILE_NAME = "log.txt";
+    private static File file;
+
+    public static void setLogFileName(String name) {
+        LOG_FILE_NAME = name;
+    }
 
     // 日志文件初始化
     public static void initFile() {
+        file = new File(LOG_FILE_NAME);
         if (!file.exists()) {
             try {
                 file.createNewFile();

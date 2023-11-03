@@ -1,4 +1,4 @@
-package org.fudan.asdt2023.editModule;
+package org.fudan.asdt2023.modules.edit;
 
 import org.fudan.asdt2023.main.EditingFile;
 import org.fudan.asdt2023.main.MarkdownEditor;

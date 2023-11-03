@@ -29,6 +29,10 @@ public class MarkdownEditor {
         modules.remove(name);
     }
 
+    public Module getModule(String name) {
+        return modules.get(name);
+    }
+
     public void addObserver(String name, CommandExecutionObserver observer) {
         observers.put(name, observer);
     }
