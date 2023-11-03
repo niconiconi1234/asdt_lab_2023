@@ -37,7 +37,6 @@ public class InsertCommand extends EditCommand {
     @Override
     public void edit() {
         context.getLines().add(editLineNo - 1, editString);
-        System.out.println(editLineNo + "|" + editString + "|" + context.numLines());
     }
 
     @Override
