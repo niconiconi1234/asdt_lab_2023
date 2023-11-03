@@ -16,12 +16,12 @@ public class UndoRedoManager implements CommandExecutionObserver {
     }
 
     @Override
-    public void beforeCommandExecute(ICommand command) {
+    public void beforeCommandExecute(ICommand command, String cmd) {
 
     }
 
     @Override
-    public void afterCommandExecute(ICommand command) {
+    public void afterCommandExecute(ICommand command, String cmd) {
         if(command.getStatus() == ICommand.ICommandExecutionStatus.EXECUTED_SUCCESS)
             if(command instanceof EditCommand)
                 recordDo((EditCommand) command);
