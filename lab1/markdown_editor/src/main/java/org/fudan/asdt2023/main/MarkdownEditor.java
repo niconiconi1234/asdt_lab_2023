@@ -95,6 +95,7 @@ public class MarkdownEditor {
                     method.invoke(command, args);
                     cmd.setStatus(ICommand.ICommandExecutionStatus.EXECUTED_SUCCESS);
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     cmd.setStatus(ICommand.ICommandExecutionStatus.EXECUTED_FAILURE);
                 }
                 return null;
