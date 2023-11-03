@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.fudan.asdt2023.i.CommandExecutionObserver;
 import org.fudan.asdt2023.i.ICommand;
 import org.fudan.asdt2023.i.Module;
+import org.fudan.asdt2023.utils.ReflectionUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -104,9 +105,10 @@ public class MarkdownEditor {
             }
         };
 
+
         return (ICommand) java.lang.reflect.Proxy.newProxyInstance(
                 command.getClass().getClassLoader(),
-                command.getClass().getInterfaces(),
+                ReflectionUtils.getAllInterfaces(command.getClass()),
                 executeInvocationHandler);
     }
 }
