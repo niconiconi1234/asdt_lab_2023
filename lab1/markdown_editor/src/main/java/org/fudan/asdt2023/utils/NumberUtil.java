@@ -1,4 +1,4 @@
-package org.fudan.asdt2023.modules.edit.command;
+package org.fudan.asdt2023.utils;
 
 public class NumberUtil {
     public static boolean isNumber(String str){

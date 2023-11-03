@@ -8,6 +8,7 @@ import org.fudan.asdt2023.i.Module;
 import org.fudan.asdt2023.utils.ReflectionUtils;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class MarkdownEditor {
 
         // 通知observers，command开始执行了
         for (CommandExecutionObserver o : observers.values()) {
-            o.beforeCommandExecute(iCommand);
+            o.beforeCommandExecute(iCommand, command);
         }
 
         // 执行command
@@ -70,7 +71,7 @@ public class MarkdownEditor {
 
         // 通知observers，command执行完毕了
         for (CommandExecutionObserver o : observers.values()) {
-            o.afterCommandExecute(iCommand);
+            o.afterCommandExecute(iCommand, command);
         }
     }
 
@@ -95,6 +96,11 @@ public class MarkdownEditor {
                     method.invoke(command, args);
                     cmd.setStatus(ICommand.ICommandExecutionStatus.EXECUTED_SUCCESS);
                 } catch (Exception e) {
+                    if (e instanceof InvocationTargetException) {
+                        System.out.println(((InvocationTargetException) e).getTargetException().getMessage());
+                    }else {
+                        System.out.println(e.getMessage());
+                    }
                     cmd.setStatus(ICommand.ICommandExecutionStatus.EXECUTED_FAILURE);
                 }
                 return null;

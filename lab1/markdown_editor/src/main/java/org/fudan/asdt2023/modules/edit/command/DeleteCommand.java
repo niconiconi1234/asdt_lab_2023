@@ -2,6 +2,7 @@ package org.fudan.asdt2023.modules.edit.command;
 
 import org.fudan.asdt2023.main.EditingFile;
 import org.fudan.asdt2023.modules.edit.command.i.EditCommand;
+import org.fudan.asdt2023.utils.NumberUtil;
 
 public class DeleteCommand extends EditCommand {
     public DeleteCommand(EditingFile context, String command) {

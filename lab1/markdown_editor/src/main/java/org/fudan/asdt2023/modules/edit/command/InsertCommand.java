@@ -2,6 +2,7 @@ package org.fudan.asdt2023.modules.edit.command;
 
 import org.fudan.asdt2023.main.EditingFile;
 import org.fudan.asdt2023.modules.edit.command.i.EditCommand;
+import org.fudan.asdt2023.utils.NumberUtil;
 
 public class InsertCommand extends EditCommand {
     public InsertCommand(EditingFile context, String command) {

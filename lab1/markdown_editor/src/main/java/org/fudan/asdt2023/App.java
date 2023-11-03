@@ -8,6 +8,8 @@ import org.fudan.asdt2023.modules.edit.EditModule;
 import org.fudan.asdt2023.modules.log.LogManager;
 import org.fudan.asdt2023.modules.log.LogModule;
 
+import java.util.Scanner;
+
 /**
  * Hello world!
  */
@@ -28,5 +30,13 @@ public class App {
         editor.addObserver("log", logManager);
         LogModule logModule = new LogModule(v -> MarkdownEditorSingleton.getInstance().getObserver("log"));
         editor.addModule("log", logModule);
+
+        Scanner scanner = new Scanner(System.in);
+        String command = "";
+        while (true){
+            System.out.println("请输入命令");
+            command = scanner.nextLine();
+            editor.executeCommand(command);
+        }
     }
 }

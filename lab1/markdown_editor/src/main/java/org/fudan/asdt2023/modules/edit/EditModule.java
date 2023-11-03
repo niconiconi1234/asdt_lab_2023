@@ -23,7 +23,7 @@ public class EditModule extends Module {
         EditingFile fileContext = (EditingFile)context;
 
         //解析命令
-        String cmd = command.substring(0, command.indexOf(" "));
+        String cmd = !command.contains(" ") ? command : command.substring(0, command.indexOf(" "));
 
         ICommand iCommand;
         switch (cmd){
