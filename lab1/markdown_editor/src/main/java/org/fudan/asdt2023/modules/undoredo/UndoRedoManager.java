@@ -11,8 +11,15 @@ public class UndoRedoManager implements CommandExecutionObserver {
     private Stack<EditCommand> redoStack;
 
     @Override
-    public void onCommandExecuted(ICommand command) {
+    public void beforeCommandExecute(ICommand command) {
 
+    }
+
+    @Override
+    public void afterCommandExecute(ICommand command) {
+        if(command.getStatus() == ICommand.ICommandExecutionStatus.EXECUTED_SUCCESS)
+            if(command instanceof EditCommand)
+                recordDo((EditCommand) command);
     }
 
     public void recordDo(EditCommand command){
