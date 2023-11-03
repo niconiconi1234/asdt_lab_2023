@@ -34,7 +34,7 @@ public class App {
         // undoredo module
         CommandExecutionObserver undoRedoManager = new UndoRedoManager();
         editor.addObserver("undoredo", undoRedoManager);
-        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> MarkdownEditorSingleton.getInstance().getObserver("undoredu"));
+        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> MarkdownEditorSingleton.getInstance().getObserver("undoredo"));
         editor.addModule("undoredo", undoRedoModule);
     }
 }

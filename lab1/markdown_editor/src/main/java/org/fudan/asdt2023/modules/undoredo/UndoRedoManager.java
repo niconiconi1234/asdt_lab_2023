@@ -10,6 +10,11 @@ public class UndoRedoManager implements CommandExecutionObserver {
     private Stack<EditCommand> commandStack;
     private Stack<EditCommand> redoStack;
 
+    public UndoRedoManager() {
+        commandStack = new Stack<EditCommand>();
+        redoStack = new Stack<EditCommand>();
+    }
+
     @Override
     public void beforeCommandExecute(ICommand command) {
 
@@ -36,6 +41,7 @@ public class UndoRedoManager implements CommandExecutionObserver {
         try{
             topCommand.undo();
             redoStack.push(topCommand);
+            commandStack.pop();
         } catch (Exception e){
             // 正常情况下不会抛出异常
             throw new RuntimeException("undo 出现异常：" + e.getMessage());
@@ -53,6 +59,7 @@ public class UndoRedoManager implements CommandExecutionObserver {
         try{
             topCommand.execute();
             commandStack.push(topCommand);
+            redoStack.pop();
         } catch (Exception e) {
             // 正常情况下不会抛出异常
             throw new RuntimeException("redo 出现异常：" + e.getMessage());

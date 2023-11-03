@@ -18,15 +18,15 @@ public class UndoRedoCommandTest {
 
     @Before
     public void beforeTest(){
-        editor = MarkdownEditorSingleton.getInstance();
+        editor = new MarkdownEditor();
 
         CommandExecutionObserver undoRedoManager = new UndoRedoManager();
         editor.addObserver("undoredo", undoRedoManager);
-        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> MarkdownEditorSingleton.getInstance().getObserver("undoredu"));
+        UndoRedoModule undoRedoModule = new UndoRedoModule(v -> editor.getObserver("undoredo"));
         editor.addModule("undoredo", undoRedoModule);
 
         // edit module
-        EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
+        EditModule editModule = new EditModule(v -> editor.getCurFile());
         editor.addModule("edit", editModule);
 
         List<String> lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour");
@@ -37,10 +37,8 @@ public class UndoRedoCommandTest {
     }
 
     public void checkFile(List<String> lines){
-        List<String> fileLines = MarkdownEditorSingleton.getInstance().getCurFile().getLines();
-        assertEquals(fileLines.size(), lines.size());
-        for(int i = 0;i < fileLines.size();i++)
-            assertEquals(fileLines.get(i), lines.get(i));
+        List<String> fileLines = editor.getCurFile().getLines();
+        assertEquals(lines, fileLines);
     }
 
     @Test
@@ -71,7 +69,7 @@ public class UndoRedoCommandTest {
         lines = List.of("# hello", "line2", "## hi", "line3", "# hello", "## hallo");
         checkFile(lines);
         editor.executeCommand("insert 4 line4");
-        editor.executeCommand("insert 3 line");
+        editor.executeCommand("insert 3 line3_2");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
@@ -83,7 +81,7 @@ public class UndoRedoCommandTest {
         editor.executeCommand("redo");
         editor.executeCommand("redo");
         editor.executeCommand("redo");
-        lines = List.of("# hello", "## hi", "line3", "line3", "line4", "# hello", "## hallo");
+        lines = List.of("# hello", "line2", "line3_2", "## hi", "line4", "line3", "# hello", "## hallo");
         checkFile(lines);
     }
 
@@ -91,28 +89,28 @@ public class UndoRedoCommandTest {
     public void undoRedoWithDelete(){
         editor.executeCommand("delete 1");
         editor.executeCommand("undo");
-        List<String> lines = List.of("## hi", "# hello", "## hallo", "* bon jour");
+        List<String> lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
-        lines = List.of("# hello", "## hallo", "* bon jour");
+        lines = List.of("## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
 
         editor.executeCommand("delete jour");
         editor.executeCommand("undo");
-        lines = List.of("# hello", "## hallo", "* bon jour");
+        lines = List.of("## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
-        lines = List.of("# hello", "## hallo");
+        lines = List.of("## hi", "# hello", "## hallo");
         checkFile(lines);
 
         editor.executeCommand("undo");
         editor.executeCommand("undo");
-        lines = List.of("## hi", "# hello", "## hallo", "* bon jour");
+        lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
         editor.executeCommand("redo");
         editor.executeCommand("redo");
-        lines = List.of("# hello", "## hallo");
+        lines = List.of("## hi", "# hello", "## hallo");
         checkFile(lines);
     }
 
@@ -122,13 +120,13 @@ public class UndoRedoCommandTest {
         editor.executeCommand("append-head # Big Title2");
         editor.executeCommand("append-head # Big Title3");
         editor.executeCommand("undo");
-        List<String> lines = List.of("# Big Title2", "# Big Title1", "## hi", "# hello", "## hallo", "* bon jour");
+        List<String> lines = List.of("# Big Title2", "# Big Title1", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
-        lines = List.of("# Big Title3", "# Big Title2", "# Big Title1", "## hi", "# hello", "## hallo", "* bon jour");
+        lines = List.of("# Big Title3", "# Big Title2", "# Big Title1", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
-        lines = List.of("# Big Title3", "# Big Title2", "# Big Title1", "## hi", "# hello", "## hallo", "* bon jour");
+        lines = List.of("# Big Title3", "# Big Title2", "# Big Title1", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
 
         editor.executeCommand("undo");
@@ -136,7 +134,7 @@ public class UndoRedoCommandTest {
         editor.executeCommand("undo");
         editor.executeCommand("redo");
         editor.executeCommand("redo");
-        lines = List.of("# Big Title2", "# Big Title1", "## hi", "# hello", "## hallo", "* bon jour");
+        lines = List.of("# Big Title2", "# Big Title1", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
     }
 
@@ -147,10 +145,10 @@ public class UndoRedoCommandTest {
         editor.executeCommand("append-tail ### Tail3");
         editor.executeCommand("append-tail ### Tail4");
         editor.executeCommand("undo");
-        List<String> lines = List.of("## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2", "### Tail3");
+        List<String> lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2", "### Tail3");
         checkFile(lines);
         editor.executeCommand("redo");
-        lines = List.of("## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2", "### Tail3", "### Tail4");
+        lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2", "### Tail3", "### Tail4");
         checkFile(lines);
 
         editor.executeCommand("append-tail ### Tail5");
@@ -159,7 +157,7 @@ public class UndoRedoCommandTest {
         editor.executeCommand("undo");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
-        lines = List.of("## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2");
+        lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2");
         checkFile(lines);
         editor.executeCommand("append-tail ### Tail7");
         editor.executeCommand("append-tail ### Tail8");
@@ -169,7 +167,7 @@ public class UndoRedoCommandTest {
         editor.executeCommand("undo");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
-        lines = List.of("## hi", "# hello", "## hallo", "* bon jour", "### Tail1", "### Tail2", "### Tail3", "### Tail4", "### Tail5");
+        lines = List.of("# hello", "## hi", "# hello", "## hallo", "* bon jour", "### Tail1");
         checkFile(lines);
     }
 
@@ -180,34 +178,34 @@ public class UndoRedoCommandTest {
         editor.executeCommand("append-head # Title");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
-        List<String> lines = List.of("## hi", "test", "# hello", "## hallo", "* bon jour");
+        List<String> lines = List.of("test", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
 
         editor.executeCommand("insert 1 test");
         editor.executeCommand("delete 1");
         editor.executeCommand("append-head # Title");
         editor.executeCommand("redo");
-        lines = List.of("Title", "test", "# hello", "## hallo", "* bon jour");
+        lines = List.of("# Title", "test", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("undo");
-        lines = List.of("test", "# hello", "## hallo", "* bon jour");
+        lines = List.of("test", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("undo");
-        lines = List.of("## hi", "test", "# hello", "## hallo", "* bon jour");
+        lines = List.of("test", "test", "# hello", "## hi", "# hello", "## hallo", "* bon jour");
         checkFile(lines);
         editor.executeCommand("redo");
         editor.executeCommand("delete hallo");
         editor.executeCommand("append-tail *tail");
         editor.executeCommand("append-head # head");
         editor.executeCommand("delete 4");
-        lines = List.of("# head", "test", "# hello", "tail");
+        lines = List.of("# head", "test", "# hello", "# hello", "* bon jour", "*tail");
         checkFile(lines);
 
         editor.executeCommand("undo");
         editor.executeCommand("undo");
         editor.executeCommand("undo");
         editor.executeCommand("redo");
-        lines = List.of("test", "# hello", "* bon jour", "tail");
+        lines = List.of("test", "# hello", "## hi", "# hello", "* bon jour", "*tail");
         checkFile(lines);
     }
 
