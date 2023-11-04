@@ -3,8 +3,10 @@ package org.fudan.asdt2023.modules.disk.command;
 
 import org.fudan.asdt2023.main.MarkdownEditor;
 import org.fudan.asdt2023.modules.disk.command.i.DiskCommand;
+import org.fudan.asdt2023.utils.FileUtil;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +24,11 @@ public class LoadCommand extends DiskCommand {
 
     public static List<String> getFileContent(String path) throws IOException {
         List<String> strList = new ArrayList<String>();
-        File file = new File(path);
+        File file = FileUtil.initFile(path);
 
         InputStreamReader read = null;
         BufferedReader reader = null;
-        read = new InputStreamReader(new FileInputStream(file),"utf-8");
+        read = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
         reader = new BufferedReader(read);
 
         String line;

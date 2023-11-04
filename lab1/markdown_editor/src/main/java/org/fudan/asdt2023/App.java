@@ -7,6 +7,8 @@ import org.fudan.asdt2023.modules.disk.DiskModule;
 import org.fudan.asdt2023.modules.edit.EditModule;
 import org.fudan.asdt2023.modules.log.LogManager;
 import org.fudan.asdt2023.modules.log.LogModule;
+import org.fudan.asdt2023.modules.stats.StatsManager;
+import org.fudan.asdt2023.modules.stats.StatsModule;
 import org.fudan.asdt2023.modules.undoredo.UndoRedoManager;
 import org.fudan.asdt2023.modules.undoredo.UndoRedoModule;
 
@@ -38,6 +40,12 @@ public class App {
         editor.addObserver("log", logManager);
         LogModule logModule = new LogModule(v -> MarkdownEditorSingleton.getInstance().getObserver("log"));
         editor.addModule("log", logModule);
+
+        // stats module
+        CommandExecutionObserver statsManager = new StatsManager();
+        editor.addObserver("stats", statsManager);
+        StatsModule statsModule = new StatsModule(v -> MarkdownEditorSingleton.getInstance().getObserver("stats"));
+        editor.addModule("stats", statsModule);
 
 //        Scanner scanner = new Scanner(System.in);
 //        String command = "";

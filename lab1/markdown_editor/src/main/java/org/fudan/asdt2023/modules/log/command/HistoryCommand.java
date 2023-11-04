@@ -38,7 +38,7 @@ public class HistoryCommand extends LogCommand {
         }
     }
 
-    public void printHistory(List<String> history, int number) {
+    private void printHistory(List<String> history, int number) {
         for (int i=0;i< number;i++){
             System.out.println(history.get(i));
         }

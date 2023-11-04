@@ -19,7 +19,6 @@ public class SaveCommand extends DiskCommand {
     public void execute() {
 
         List<String> strList = context.getCurFile().getLines();
-        System.out.println("inside"+context.getCurFile().getName());
         File write = new File(context.getCurFile().getName());
         FileWriter writer= null;
         try {

@@ -1,5 +1,7 @@
 package org.fudan.asdt2023.modules.log.util;
 
+import org.fudan.asdt2023.utils.FileUtil;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,38 +18,12 @@ public class LogFileUtil {
 
     // 日志文件初始化
     public static void initFile() {
-        file = new File(LOG_FILE_NAME);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                System.out.println("日志文件已创建");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // 获取当前时间并格式化
-    public static String getLogTime() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
-        return currentTime.format(formatter);
+        file = FileUtil.initFile(LOG_FILE_NAME);
     }
 
     // 向日志文件中写入一行
     public static void writeLine(String line) {
-        try {
-            if (!file.exists()) {
-                initFile(); // 如果文件不存在，则初始化文件
-            }
-            FileWriter fileWriter = new FileWriter(file, true); // 使用true以启用追加模式
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(line);
-            bufferedWriter.newLine(); // 添加换行符
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUtil.writeLine(line, file);
     }
 
     // 读取日志文件中最近一次session的所有history
