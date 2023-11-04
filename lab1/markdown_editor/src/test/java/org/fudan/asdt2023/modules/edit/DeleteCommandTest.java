@@ -19,7 +19,7 @@ public class DeleteCommandTest {
         // edit module
         EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
         editor.addModule("edit", editModule);
-
+        editor.getCurFile().getLines().clear();
         editor.executeCommand("insert # hello");
         editor.executeCommand("insert ## hi");
         editor.executeCommand("insert # hello");

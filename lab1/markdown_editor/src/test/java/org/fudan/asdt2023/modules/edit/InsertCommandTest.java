@@ -18,6 +18,8 @@ public class InsertCommandTest {
         // edit module
         EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
         editor.addModule("edit", editModule);
+        //单例模式，所以要显示清除
+        editor.getCurFile().getLines().clear();
     }
 
     @Test
