@@ -26,10 +26,11 @@ public class HistoryCommand extends LogCommand {
 
         String[] commandPart = command.split(" ");
         if (commandPart.length == 1) {
-            printHistory(histories, histories.size());
+            printHistory(histories, histories.size()-1);
         }else if (commandPart.length == 2){
             if (NumberUtil.isNumber(commandPart[1]) && NumberUtil.getNumber(commandPart[1])>0){
-                printHistory(histories, NumberUtil.getNumber(commandPart[1]));
+                int number = NumberUtil.getNumber(commandPart[1]);
+                printHistory(histories, Math.min(number, histories.size() - 1));
             }else {
                 throw new RuntimeException("请输入大于0的整数");
             }
