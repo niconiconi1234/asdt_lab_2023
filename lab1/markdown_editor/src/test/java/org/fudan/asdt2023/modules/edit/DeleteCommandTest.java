@@ -13,13 +13,12 @@ public class DeleteCommandTest {
     private MarkdownEditor editor;
     @Before
     public void beforeTest(){
-        editor = MarkdownEditorSingleton.getInstance();
+        editor = new MarkdownEditor();
 
 
         // edit module
-        EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
+        EditModule editModule = new EditModule(v -> editor.getCurFile());
         editor.addModule("edit", editModule);
-        editor.getCurFile().getLines().clear();
         editor.executeCommand("insert # hello");
         editor.executeCommand("insert ## hi");
         editor.executeCommand("insert # hello");
@@ -30,14 +29,14 @@ public class DeleteCommandTest {
     @Test
     public void deleteWithLineNumber(){
         editor.executeCommand("delete 1");
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals("## hi", file.getLines().get(0));
     }
 
     @Test
     public void deleteWithIllegalLineNumber(){
         editor.executeCommand("delete 6");
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals(5, file.getLines().size());
     }
 
@@ -45,7 +44,7 @@ public class DeleteCommandTest {
     public void deleteWithText(){
         editor.executeCommand("delete hello");
         editor.executeCommand("delete hello");
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals("## hi", file.getLines().get(0));
         assertEquals("## hallo", file.getLines().get(1));
     }

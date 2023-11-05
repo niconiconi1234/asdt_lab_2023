@@ -13,10 +13,10 @@ public class InsertCommandTest {
     private MarkdownEditor editor;
     @Before
     public void beforeTest(){
-        editor = MarkdownEditorSingleton.getInstance();
+        editor = new MarkdownEditor();
 
         // edit module
-        EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
+        EditModule editModule = new EditModule(v -> editor.getCurFile());
         editor.addModule("edit", editModule);
         //单例模式，所以要显示清除
         editor.getCurFile().getLines().clear();
@@ -27,7 +27,7 @@ public class InsertCommandTest {
         editor.executeCommand("insert 1 ## hello");
         editor.executeCommand("insert 1 # hi");
 
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals(2, file.getLines().size());
         assertEquals("# hi", file.getLines().get(0));
         assertEquals("## hello", file.getLines().get(1));
@@ -39,7 +39,7 @@ public class InsertCommandTest {
         editor.executeCommand("insert # hello");
         editor.executeCommand("insert ## hallo");
 
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals("## hallo", file.getLines().get(1));
     }
 
@@ -47,7 +47,7 @@ public class InsertCommandTest {
     public void insertWithIllegalLineNumber(){
         editor.executeCommand("insert -1 ## hello");
 
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals(0, file.getLines().size());
     }
 

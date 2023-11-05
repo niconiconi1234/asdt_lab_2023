@@ -13,11 +13,11 @@ public class AppendHeadCommandTest {
     private MarkdownEditor editor;
     @Before
     public void beforeTest(){
-        editor = MarkdownEditorSingleton.getInstance();
+        editor = new MarkdownEditor();
 
 
         // edit module
-        EditModule editModule = new EditModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
+        EditModule editModule = new EditModule(v -> editor.getCurFile());
         editor.addModule("edit", editModule);
     }
 
@@ -26,7 +26,7 @@ public class AppendHeadCommandTest {
         editor.executeCommand("append-head # hello");
         editor.executeCommand("append-head ## hi");
 
-        EditingFile file = MarkdownEditorSingleton.getInstance().getCurFile();
+        EditingFile file = editor.getCurFile();
         assertEquals(2, file.getLines().size());
         assertEquals("# hello", file.getLines().get(1));
         assertEquals("## hi", file.getLines().get(0));

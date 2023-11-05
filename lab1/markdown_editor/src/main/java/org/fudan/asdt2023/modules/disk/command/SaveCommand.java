@@ -17,7 +17,9 @@ public class SaveCommand extends DiskCommand {
 
     @Override
     public void execute() {
-
+        if (context.getCurFile().getName() == null) {
+            throw new RuntimeException("请先加载文件");
+        }
         List<String> strList = context.getCurFile().getLines();
         File write = new File(context.getCurFile().getName());
         FileWriter writer= null;
