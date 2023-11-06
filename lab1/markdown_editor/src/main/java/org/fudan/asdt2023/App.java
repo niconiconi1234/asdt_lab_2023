@@ -4,6 +4,7 @@ import org.fudan.asdt2023.i.CommandExecutionObserver;
 import org.fudan.asdt2023.main.MarkdownEditor;
 import org.fudan.asdt2023.main.MarkdownEditorSingleton;
 import org.fudan.asdt2023.modules.disk.DiskModule;
+import org.fudan.asdt2023.modules.display.DisplayModule;
 import org.fudan.asdt2023.modules.edit.EditModule;
 import org.fudan.asdt2023.modules.log.LogManager;
 import org.fudan.asdt2023.modules.log.LogModule;
@@ -47,12 +48,16 @@ public class App {
         StatsModule statsModule = new StatsModule(v -> MarkdownEditorSingleton.getInstance().getObserver("stats"));
         editor.addModule("stats", statsModule);
 
-//        Scanner scanner = new Scanner(System.in);
-//        String command = "";
-//        while (true){
-//            System.out.println("请输入命令");
-//            command = scanner.nextLine();
-//            editor.executeCommand(command);
-//        }
+        // display module
+        DisplayModule displayModule = new DisplayModule(v -> MarkdownEditorSingleton.getInstance().getCurFile());
+        editor.addModule("display", displayModule);
+
+        Scanner scanner = new Scanner(System.in);
+        String command = "";
+        while (true){
+            System.out.println("请输入命令");
+            command = scanner.nextLine();
+            editor.executeCommand(command);
+        }
     }
 }
