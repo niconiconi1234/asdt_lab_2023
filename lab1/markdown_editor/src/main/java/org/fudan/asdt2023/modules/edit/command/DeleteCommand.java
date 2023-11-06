@@ -19,7 +19,7 @@ public class DeleteCommand extends EditCommand {
         if(NumberUtil.isNumber(commandPart[1])){
             //删除指定行号
             editLineNo = NumberUtil.getNumber(commandPart[1]);
-            if(editLineNo <= 0 || editLineNo >= context.getLines().size())
+            if(editLineNo <= 0 || editLineNo > context.getLines().size())
                 throw new RuntimeException("非法行号： " + editLineNo);
             editString = fileLines.get(editLineNo - 1);
         }
