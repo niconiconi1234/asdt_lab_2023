@@ -28,7 +28,7 @@ public class DisplayModule extends Module {
         EditingFile fileContext = (EditingFile)context;
 
         //解析命令
-        String cmd = command.substring(0, command.contains(" ") ?command.indexOf(" "):command.length()-1);
+        String cmd = command.substring(0, command.contains(" ") ?command.indexOf(" "):command.length());
 
         ICommand iCommand = switch (cmd) {
             case "list" -> new ListCommand(fileContext, command);
