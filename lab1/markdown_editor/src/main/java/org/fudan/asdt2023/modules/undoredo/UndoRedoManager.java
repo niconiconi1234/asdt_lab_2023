@@ -2,6 +2,7 @@ package org.fudan.asdt2023.modules.undoredo;
 
 import org.fudan.asdt2023.i.CommandExecutionObserver;
 import org.fudan.asdt2023.i.ICommand;
+import org.fudan.asdt2023.modules.disk.command.LoadCommand;
 import org.fudan.asdt2023.modules.edit.command.i.EditCommand;
 
 import java.util.Stack;
@@ -23,8 +24,13 @@ public class UndoRedoManager implements CommandExecutionObserver {
     @Override
     public void afterCommandExecute(ICommand command, String cmd) {
         if(command.getStatus() == ICommand.ICommandExecutionStatus.EXECUTED_SUCCESS)
-            if(command instanceof EditCommand)
+            if(command instanceof EditCommand){
                 recordDo((EditCommand) command);
+            } else if (command instanceof LoadCommand) {
+                // 加载新文件时，要清空之间旧文件的undo/redo栈
+                commandStack.clear();
+                redoStack.clear();
+            }
     }
 
     public void recordDo(EditCommand command){
