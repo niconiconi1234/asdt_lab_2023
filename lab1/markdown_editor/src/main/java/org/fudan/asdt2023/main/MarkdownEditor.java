@@ -67,7 +67,11 @@ public class MarkdownEditor {
 
         // 通知observers，command开始执行了
         for (CommandExecutionObserver o : observers.values()) {
-            o.beforeCommandExecute(iCommand, command);
+            try {
+                o.beforeCommandExecute(iCommand, command);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         // 执行command
@@ -75,7 +79,11 @@ public class MarkdownEditor {
 
         // 通知observers，command执行完毕了
         for (CommandExecutionObserver o : observers.values()) {
-            o.afterCommandExecute(iCommand, command);
+            try {
+                o.afterCommandExecute(iCommand, command);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -102,7 +110,7 @@ public class MarkdownEditor {
                 } catch (Exception e) {
                     if (e instanceof InvocationTargetException) {
                         System.out.println(((InvocationTargetException) e).getTargetException().getMessage());
-                    }else {
+                    } else {
                         System.out.println(e.getMessage());
                     }
                     cmd.setStatus(ICommand.ICommandExecutionStatus.EXECUTED_FAILURE);
