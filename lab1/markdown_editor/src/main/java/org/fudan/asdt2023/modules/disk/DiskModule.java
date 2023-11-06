@@ -22,15 +22,14 @@ public class DiskModule extends Module {
         MarkdownEditor fileContext = (MarkdownEditor)context;
 
 //解析命令
-        String[] arg = command.split(" ");
-        String cmd = arg[0];
-
-        ICommand iCommand;
-        if(cmd.equals("load")){
+        if(command.contains("load")){
+            if (!command.contains(" ")) return null;
+            String[] arg = command.split(" ");
+            if (!arg[0].equals("load")) return null;
             String fileName = arg[1];
             return new LoadCommand(fileContext, fileName);
         }
-        else if(cmd.equals("save")){
+        else if(command.equals("save")){
             return new SaveCommand(fileContext);
         }
         return null;
