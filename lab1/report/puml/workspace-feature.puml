@@ -1,0 +1,86 @@
+@startuml WorkspaceFeature
+
+class MarkdownEditor{
+    - modules: Map<String, Module>
+    - curFile: EditingFile
+    - wsManager: WorkspaceManager
+}
+
+abstract Module {
+    + parseCommand(command: String): Command
+}
+
+class DiskModule {
+}
+
+class WorkspaceModule {
+}
+
+class WorkspaceManager {
+    - Map<String, EditingFile> allFiles
+}
+
+class UndoRedoModule {
+}
+
+class UndoRedoManager {
+    - undoStack: Stack<Command>
+    - redoStack: Stack<Command>
+    - allStacks: Map<String, Pair<Stack<Command>, Stack<Command>>>
+}
+
+class LoadCommand {
+    - context: MarkdownEditor
+    + execute()
+}
+
+class ListWsCommand {
+    - context: WorkspaceManager
+    + execute()
+}
+
+class CloseWsCommand {
+    - context: WorkspaceManager
+    + execute()
+}
+
+class SwitchWsCommand {
+    - context: WorkspaceManager
+    + execute()
+}
+
+interface WorkspaceObserver {
+    + onWorkspaceAdded(EditingFile file)
+    + onWorkspaceSwitched(EditingFile file)
+    + onWorkspaceClosed(EditingFile file)
+}
+
+MarkdownEditor *-- Module
+
+DiskModule --|> Module
+
+WorkspaceModule -up-|> Module
+
+UndoRedoModule -right-|> Module
+
+DiskModule -left-- MarkdownEditor : context
+
+WorkspaceModule -left-- WorkspaceManager : context
+
+UndoRedoModule --- UndoRedoManager : context
+
+WorkspaceModule -down-> CloseWsCommand : 产生
+
+WorkspaceModule -down-> ListWsCommand : 产生
+
+WorkspaceModule -down-> SwitchWsCommand : 产生
+
+DiskModule -down-> LoadCommand : 产生
+
+UndoRedoManager -up-|> WorkspaceObserver
+
+WorkspaceManager -left-|> WorkspaceObserver
+
+MarkdownEditor --|> WorkspaceObserver
+
+@enduml

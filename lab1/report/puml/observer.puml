@@ -1,0 +1,25 @@
+@startuml observer
+
+interface CommandExecutionObserver {
+    + beforeCommandExecution(Command command): void
+    + afterCommandExecution(Command command): void
+}
+
+class LogManager {
+    + writeLogToFile(String log): void
+}
+
+class StatsManager {
+    + updateStats(Command command): void
+}
+
+class UndoRedoManager {
+    - undoStack: Stack<Command>
+    - redoStack: Stack<Command>
+}
+
+CommandExecutionObserver <|.. LogManager
+CommandExecutionObserver <|.. StatsManager
+CommandExecutionObserver <|.. UndoRedoManager
+
+@enduml

@@ -1,0 +1,50 @@
+@startuml main-small
+class MarkdownEditor {
+  - modules: Map<String, Module>
+  - observers: Map<String, CommandExecutionObserver>
+  + addModule(module: Module): void
+  + removeModule(module: Module): void
+}
+
+interface CommandExecutionObserver {
+  + beforeCommandExecution(command: Command): void
+  + afterCommandExecution(command: Command): void
+}
+
+class MarkdownEditorSingleton {
+  - instance: MarkdownEditor
+  + getInstance(): MarkdownEditor
+}
+
+abstract class Module {
+  - fetchContext: Function<Context>
+  + parseCommand(String): Command
+}
+
+class ConcreteModule {
+  + parseCommand(): Command
+}
+
+class Context {
+}
+
+abstract class Command {
+  - context: Context
+  - status: ExecutionStatus
+  + execute(): void
+}
+
+class ConcreteCommand {
+  + execute(): void
+}
+
+MarkdownEditorSingleton --> MarkdownEditor :getInstance
+MarkdownEditor "1" *-- "0..*" Module
+MarkdownEditor "1" *-- "0..*" CommandExecutionObserver
+Module *-- Context
+Command "1" *-- "1" Context
+Module ---> Command :产生
+ConcreteModule --|> Module
+Command <|-- ConcreteCommand
+
+@enduml

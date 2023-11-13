@@ -1,0 +1,18 @@
+@startuml MarkdownEditorSequenceDiagram
+title Markdown Editor Command Execution
+
+participant MarkdownEditor
+participant Module
+participant Command
+participant Observer
+
+MarkdownEditor -> MarkdownEditor: Read user input command
+loop for each Module
+    MarkdownEditor -> Module: parseCommand(input)
+    Module -> Module: fetchContext()
+    Module -> Command: new Command(context)
+end
+MarkdownEditor -> Observer: beforeCommandExecuted(command)
+MarkdownEditor -> Command: execute()
+MarkdownEditor -> Observer: afterCommandExecuted(command)
+@enduml
